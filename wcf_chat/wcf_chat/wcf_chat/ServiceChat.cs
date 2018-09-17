@@ -14,6 +14,7 @@ namespace wcf_chat
     {
         List<ServerUser> users = new List<ServerUser>();
         int nextId = 1;
+    
 
         public int Connect(string name)
         {
@@ -28,6 +29,7 @@ namespace wcf_chat
             SendMsg(": "+user.Name+" подключился к чату!",0);
             users.Add(user);
             return user.ID;
+
         }
 
         public void Disconnect(int id)
@@ -37,6 +39,7 @@ namespace wcf_chat
             {
                 users.Remove(user);
                 SendMsg(": "+user.Name + " покинул чат!",0);
+                
             }
         }
 
@@ -53,6 +56,7 @@ namespace wcf_chat
                 }
                 answer += msg;
                 item.operationContext.GetCallbackChannel<IServerChatCallback>().MsgCallback(answer);
+                new Out(answer);
             }
         }
     }

@@ -38,11 +38,18 @@ namespace ChatClient
         {
             if (!isConnected)
             {
-                client = new ServiceChatClient(new System.ServiceModel.InstanceContext(this));
-                ID = client.Connect(tbUserName.Text);
-                tbUserName.IsEnabled = false;
-                bConnDicon.Content = "Disconnect";
-                isConnected = true;
+                try
+                {
+                    client = new ServiceChatClient(new System.ServiceModel.InstanceContext(this));
+                    ID = client.Connect(tbUserName.Text);
+                    tbUserName.IsEnabled = false;
+                    bConnDicon.Content = "Disconnect";
+                    isConnected = true;
+                } catch(Exception ex)
+                {
+                    tbMessage.Text = ex.ToString();
+                }
+               
             }
         }
 
@@ -50,11 +57,19 @@ namespace ChatClient
         {
             if (isConnected)
             {
-                client.Disconnect(ID);
-                client = null;
-                tbUserName.IsEnabled = true;
-                bConnDicon.Content = "Connect";
-                isConnected = false;
+                try
+                {
+                    client.Disconnect(ID);
+                    client = null;
+                    tbUserName.IsEnabled = true;
+                    bConnDicon.Content = "Connect";
+                    isConnected = false;
+                }catch(Exception ex)
+                {
+                    tbMessage.Text = ex.ToString();
+                   
+                }
+               
             }
 
         }
