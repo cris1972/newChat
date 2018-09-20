@@ -22,14 +22,16 @@ namespace wcf_chat
             ServerUser user = new ServerUser() {
                 ID = nextId,
                 Name = name,
-                operationContext = OperationContext.Current
+                OperationContext = OperationContext.Current
             };
             nextId++;
 
-            SendMsg(": "+user.Name+" подключился к чату!",0);
+            SendMsg(": " +user.Name+" подключился к чату!",0);
+            
             users.Add(user);
+            
             return user.ID;
-
+           
         }
 
         public void Disconnect(int id)
@@ -39,15 +41,18 @@ namespace wcf_chat
             {
                 users.Remove(user);
                 SendMsg(": "+user.Name + " покинул чат!",0);
-                
+                new Out(": " + user.Name + " покинул чат!");
+
             }
         }
 
         public void SendMsg(string msg, int id)
         {
+            string answer = DateTime.Now.ToShortTimeString();
             foreach (var item in users)
             {
-                string answer = DateTime.Now.ToShortTimeString();
+                
+             
 
                 var user = users.FirstOrDefault(i => i.ID == id);
                 if (user != null)
@@ -55,9 +60,10 @@ namespace wcf_chat
                     answer += ": " + user.Name+" ";
                 }
                 answer += msg;
-                item.operationContext.GetCallbackChannel<IServerChatCallback>().MsgCallback(answer);
-                new Out(answer);
+                item.OperationContext.GetCallbackChannel<IServerChatCallback>().MsgCallback(answer);
+                
             }
+            new Out(answer + "\n");
         }
     }
 }
